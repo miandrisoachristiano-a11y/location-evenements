@@ -1,0 +1,89 @@
+{% extends 'vitrine/base.html' %}
+
+{% block title %}Demander une réservation - EventManager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reserve-container {
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 40px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+    }
+
+    .reserve-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .reserve-title h1 {
+        font-size: 2.5rem;
+        color: var(--dark);
+        margin-bottom: 10px;
+    }
+
+    .reserve-title p {
+        color: #666;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .submit-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+        background: var(--dark);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="reserve-container">
+        <div class="reserve-title">
+            <h1>Nouvelle Réservation</h1>
+            <p>Remplissez le formulaire ci-dessous pour nous faire part de votre besoin.</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small style="color: #999;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p style="color: var(--secondary); font-size: 0.9rem; margin-top: 5px;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="submit-btn" id="submit_reserve">Envoyer la demande</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

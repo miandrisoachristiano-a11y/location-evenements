@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Capture Code</title>
+    <!-- Highlight.js pour la coloration syntaxique -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .capture-container {
+            background: linear-gradient(135deg, #FF6B6B 0%, #C44D58 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+
+        .window {
+            background: #282c34;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            min-width: 600px;
+        }
+
+        .title-bar {
+            background: #21252b;
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 15px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        /* Personnalisation Highlight.js pour correspondre au fond */
+        .hljs {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="capture-container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <pre><code class="language-python"># Extrait de : vitrine/cart.py
+class Cart:
+    def __init__(self, request):
+        self.session = request.session
+        cart = self.session.get('cart')
+        if not cart:
+            cart = self.session['cart'] = {}
+        self.cart = cart
+
+    def add(self, materiel, quantity=1, update_quantity=False):
+        materiel_id = str(materiel.id)
+        if materiel_id not in self.cart:
+            self.cart[materiel_id] = {'quantity': 0, 'price': str(materiel.prix_location_jour)}
+            
+        if update_quantity:
+            self.cart[materiel_id]['quantity'] = quantity
+        else:
+            self.cart[materiel_id]['quantity'] += quantity
+        self.save()
+
+    def get_total_price(self):
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())</code></pre>
+        </div>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

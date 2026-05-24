@@ -1,0 +1,70 @@
+{% extends 'vitrine/admin_base.html' %}
+
+{% block title %}Gestion des Événements - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="container">
+    <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1>Gestion des Événements</h1>
+        <a href="/admin/locations/location/add/" class="btn-reserve">Ajouter un événement</a>
+    </div>
+
+    <div class="recent-table">
+        <table>
+            <thead style="background: var(--light);">
+                <tr>
+                    <th>ID</th>
+                    <th>Date début</th>
+                    <th>Client</th>
+                    <th>Type d'événement</th>
+                    <th>Lieu</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>#{{ event.id }}</td>
+                    <td>{{ event.date_debut|date:"d/m/Y" }}</td>
+                    <td>{{ event.client }}</td>
+                    <td>{{ event.type_evenement }}</td>
+                    <td>{{ event.lieu_evenement }}</td>
+                    <td><span class="status-badge status-{{ event.statut }}">{{ event.get_statut_display }}</span></td>
+                    <td style="display: flex; gap: 10px;">
+                        <a href="/admin/locations/location/{{ event.id }}/change/" title="Modifier"><ion-icon name="create-outline" style="font-size: 1.2rem; color: var(--primary);"></ion-icon></a>
+                        <a href="/admin/locations/location/{{ event.id }}/delete/" title="Supprimer"><ion-icon name="trash-outline" style="font-size: 1.2rem; color: var(--secondary);"></ion-icon></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">Aucun événement enregistré.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .recent-table {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .status-en_attente { background: #fff3cd; color: #856404; }
+    .status-confirmee { background: #d4edda; color: #155724; }
+    .status-en_cours { background: #cce5ff; color: #004085; }
+    .status-terminee { background: #e2e3e5; color: #383d41; }
+    .status-annulee { background: #f8d7da; color: #721c24; }
+</style>
+{% endblock %}

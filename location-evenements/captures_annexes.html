@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Captures pour Annexes</title>
+    <!-- Highlight.js pour la coloration syntaxique -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            gap: 40px;
+        }
+
+        .capture-container {
+            background: linear-gradient(135deg, #4A90E2 0%, #003366 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: inline-block;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .capture-container.purple {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+
+        .capture-container.green {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .window {
+            background: #282c34;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            width: 100%;
+        }
+
+        .title-bar {
+            background: #21252b;
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+        
+        .title-text {
+            color: #888;
+            font-size: 13px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: monospace;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        /* Personnalisation Highlight.js */
+        .hljs {
+            background: transparent;
+        }
+
+        /* Styles pour le dictionnaire de données */
+        .data-dictionary {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .dict-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .table-title {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #2c3e50;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>1. Extrait de Code : Structure de la Base de Données (models.py)</h2>
+    <div class="capture-container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+                <div class="title-text">locations/models.py</div>
+            </div>
+            <pre><code class="language-python">from django.db import models
+
+class Location(models.Model):
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('confirmee', 'Confirmée'),
+        ('en_cours', 'En cours'),
+        ('terminee', 'Terminée'),
+        ('annulee', 'Annulée'),
+    ]
+    client = models.ForeignKey('clients.Client', on_delete=models.PROTECT)
+    type_evenement = models.ForeignKey('evenements.TypeEvenement', on_delete=models.SET_NULL, null=True)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
+    lieu_evenement = models.CharField(max_length=200)
+    
+    @property
+    def duree_jours(self):
+        return (self.date_fin - self.date_debut).days + 1
+
+class LigneLocation(models.Model):
+    location = models.ForeignKey(Location, related_name='lignes', on_delete=models.CASCADE)
+    materiel = models.ForeignKey('materiels.Materiel', on_delete=models.PROTECT)
+    quantite = models.PositiveIntegerField()
+    prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)</code></pre>
+        </div>
+    </div>
+
+    <h2>2. Extrait de Code : Algorithme Anti-Chevauchement de Dates</h2>
+    <div class="capture-container purple">
+        <div class="window">
+            <div class="title-bar">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+                <div class="title-text">locations/services.py</div>
+            </div>
+            <pre><code class="language-python">from django.db.models import Q
+from .models import LigneLocation
+
+def verifier_disponibilite(materiel_id, date_debut, date_fin, quantite_demandee):
+    """
+    Algorithme anti-chevauchement : Vérifie si la quantité de matériel 
+    demandée est disponible pour la période spécifiée.
+    """
+    # 1. Identifier les locations qui se chevauchent avec la période demandée
+    chevauchements = LigneLocation.objects.filter(
+        materiel_id=materiel_id,
+        location__statut__in=['confirmee', 'en_cours'],
+        location__date_debut__lte=date_fin,
+        location__date_fin__gte=date_debut
+    )
+    
+    # 2. Calculer la quantité déjà réservée pendant cette période
+    quantite_reservee = sum(ligne.quantite for ligne in chevauchements)
+    
+    # 3. Récupérer le stock total du matériel
+    materiel = Materiel.objects.get(id=materiel_id)
+    quantite_disponible = materiel.quantite_stock - quantite_reservee
+    
+    # 4. Vérifier si la quantité disponible est suffisante
+    return quantite_disponible >= quantite_demandee</code></pre>
+        </div>
+    </div>
+
+    <h2>3. Dictionnaire de Données Exhaustif</h2>
+    <div class="data-dictionary">
+        <div class="dict-header">
+            <h3 style="margin:0;">Dictionnaire de Données - Système EventManager</h3>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Table</th>
+                    <th>Attribut</th>
+                    <th>Type de Donnée</th>
+                    <th>Taille / Contrainte</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-title"><td colspan="5">Table : CLIENT</td></tr>
+                <tr>
+                    <td></td>
+                    <td>id</td>
+                    <td>Entier (Auto)</td>
+                    <td>Clé Primaire (PK)</td>
+                    <td>Identifiant unique du client</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>user_id</td>
+                    <td>Entier</td>
+                    <td>Clé Étrangère (FK) vers User, Unique</td>
+                    <td>Lien avec le compte utilisateur Django</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>nom</td>
+                    <td>Chaîne de caractères</td>
+                    <td>Max 100 caractères, Non Null</td>
+                    <td>Nom de famille du client</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>prenom</td>
+                    <td>Chaîne de caractères</td>
+                    <td>Max 100 caractères, Non Null</td>
+                    <td>Prénom du client</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>telephone</td>
+                    <td>Chaîne de caractères</td>
+                    <td>Max 20 caractères, Non Null</td>
+                    <td>Numéro de contact</td>
+                </tr>
+                
+                <tr class="table-title"><td colspan="5">Table : MATERIEL</td></tr>
+                <tr>
+                    <td></td>
+                    <td>id</td>
+                    <td>Entier (Auto)</td>
+                    <td>Clé Primaire (PK)</td>
+                    <td>Identifiant unique du matériel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>nom</td>
+                    <td>Chaîne de caractères</td>
+                    <td>Max 200 caractères, Non Null</td>
+                    <td>Nom de l'équipement</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>quantite_stock</td>
+                    <td>Entier Positif</td>
+                    <td>>= 0, Non Null</td>
+                    <td>Quantité totale en inventaire</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>prix_location_jour</td>
+                    <td>Décimal</td>
+                    <td>10 chiffres, 2 décimales</td>
+                    <td>Prix de location par jour</td>
+                </tr>
+
+                <tr class="table-title"><td colspan="5">Table : LOCATION</td></tr>
+                <tr>
+                    <td></td>
+                    <td>id</td>
+                    <td>Entier (Auto)</td>
+                    <td>Clé Primaire (PK)</td>
+                    <td>Numéro de la location</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>client_id</td>
+                    <td>Entier</td>
+                    <td>Clé Étrangère (FK), PROTECT</td>
+                    <td>Client ayant fait la réservation</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>date_debut</td>
+                    <td>Date</td>
+                    <td>Non Null, >= Date du jour</td>
+                    <td>Date de début de l'événement</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>date_fin</td>
+                    <td>Date</td>
+                    <td>Non Null, >= date_debut</td>
+                    <td>Date de fin de l'événement</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>statut</td>
+                    <td>Chaîne de caractères</td>
+                    <td>Max 20, Choix restreint</td>
+                    <td>État (en_attente, confirmee, etc.)</td>
+                </tr>
+
+                <tr class="table-title"><td colspan="5">Table : LIGNE_LOCATION</td></tr>
+                <tr>
+                    <td></td>
+                    <td>id</td>
+                    <td>Entier (Auto)</td>
+                    <td>Clé Primaire (PK)</td>
+                    <td>Identifiant de la ligne</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>location_id</td>
+                    <td>Entier</td>
+                    <td>Clé Étrangère (FK), CASCADE</td>
+                    <td>Lien vers la location mère</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>materiel_id</td>
+                    <td>Entier</td>
+                    <td>Clé Étrangère (FK), PROTECT</td>
+                    <td>Lien vers le matériel loué</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>quantite</td>
+                    <td>Entier Positif</td>
+                    <td>> 0, Non Null</td>
+                    <td>Quantité réservée</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

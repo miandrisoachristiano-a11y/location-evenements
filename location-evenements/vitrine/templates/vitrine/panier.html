@@ -1,0 +1,200 @@
+{% extends 'vitrine/base.html' %}
+
+{% block title %}Mon Panier - EventManager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-container {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 40px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .cart-title h1 {
+        font-size: 2.5rem;
+        color: var(--dark);
+        margin-bottom: 10px;
+    }
+
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    .cart-table th, .cart-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .cart-table th {
+        font-weight: 600;
+        color: #666;
+    }
+
+    .cart-item-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+        vertical-align: middle;
+        margin-right: 15px;
+    }
+
+    .cart-total {
+        text-align: right;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 40px;
+        color: var(--primary);
+    }
+
+    .btn-remove {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    /* Form Styles reuse */
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    .submit-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .submit-btn:hover {
+        background: var(--dark);
+        transform: translateY(-2px);
+    }
+    
+    .alert-error {
+        background: #ffe3e3;
+        color: #d63031;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="cart-container">
+        <div class="cart-title">
+            <h1>Mon Panier</h1>
+            <p>Vérifiez vos articles avant de valider votre réservation globale.</p>
+            <div style="margin-top: 20px;">
+                <a href="{% url 'vitrine:index' %}#catalogue" class="submit-btn" style="background: var(--dark); text-decoration: none; padding: 10px 25px; display: inline-block; width: auto; font-size: 1rem;">
+                    <ion-icon name="add-outline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>Ajouter d'autres matériels
+                </a>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert-error">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if cart|length > 0 %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Matériel</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire/Jour</th>
+                        <th>Sous-total/Jour</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        <tr>
+                            <td>
+                                {% if item.materiel.image_url %}
+                                    <img src="{{ item.materiel.image_url }}" alt="{{ item.materiel.nom }}" class="cart-item-img" onerror="this.onerror=null; this.src='/static/images/default_materiel.png';">
+                                {% elif item.materiel.photo %}
+                                    <img src="{{ item.materiel.photo.url }}" alt="{{ item.materiel.nom }}" class="cart-item-img" onerror="this.onerror=null; this.src='/static/images/default_materiel.png';">
+                                {% endif %}
+                                {{ item.materiel.nom }}
+                            </td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price }} Ar</td>
+                            <td>{{ item.total_price }} Ar</td>
+                            <td>
+                                <a href="{% url 'vitrine:panier_remove' item.materiel.id %}" class="btn-remove">Retirer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="cart-total">
+                Total estimé par jour : {{ cart.get_total_price }} Ar
+            </div>
+
+            <hr style="border:0; border-top:1px solid #eee; margin:40px 0;">
+
+            <div class="cart-title">
+                <h2>Finaliser la Réservation</h2>
+                <p>Veuillez indiquer les dates et le lieu pour cette demande complète.</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small style="color: #999;">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p style="color: var(--secondary); font-size: 0.9rem; margin-top: 5px;">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="submit-btn" id="submit_reserve">Confirmer la demande de location</button>
+            </form>
+
+        {% else %}
+            <div style="text-align: center; padding: 40px 0;">
+                <ion-icon name="cart-outline" style="font-size: 4rem; color: #ccc; margin-bottom: 20px;"></ion-icon>
+                <h2>Votre panier est vide</h2>
+                <p style="color: #666; margin-top: 10px;">Parcourez notre catalogue pour ajouter des matériels.</p>
+                <a href="{% url 'vitrine:index' %}" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none; margin-top: 30px;">Voir le catalogue</a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

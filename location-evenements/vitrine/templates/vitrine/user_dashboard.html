@@ -1,0 +1,115 @@
+{% extends 'vitrine/base.html' %}
+
+{% block title %}Mon Tableau de Bord - EventManager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .user-welcome {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        padding: 40px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        border-radius: 30px;
+        color: white;
+    }
+
+    .user-welcome h1 { font-size: 2.22rem; margin-bottom: 10px; }
+    
+    .action-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .action-card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: var(--dark);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: 0.3s;
+        border: 1px solid #f0f0f0;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+    }
+
+    .action-icon {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 15px;
+    }
+
+    .action-card h3 { margin-bottom: 10px; }
+    .action-card p { color: #666; font-size: 0.9rem; }
+    
+    .event-preview {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-top: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="user-welcome">
+        <div>
+            <h1>Bonjour, {{ user.first_name|default:user.username }}</h1>
+            <p>Bienvenue sur votre espace personnel EventManager.</p>
+        </div>
+        <div style="font-size: 3rem; opacity: 0.3;">
+            <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+    </div>
+
+    <div class="action-cards">
+        <a href="{% url 'vitrine:my_events' %}" class="action-card">
+            <div class="action-icon"><ion-icon name="calendar-outline"></ion-icon></div>
+            <h3>Mes Événements</h3>
+            <p>Consultez vos réservations passées et à venir.</p>
+        </a>
+        <a href="{% url 'vitrine:profile' %}" class="action-card">
+            <div class="action-icon"><ion-icon name="person-circle-outline"></ion-icon></div>
+            <h3>Profil</h3>
+            <p>Mettez à jour vos informations personnelles.</p>
+        </a>
+        <a href="/#catalogue" class="action-card">
+            <div class="action-icon"><ion-icon name="add-circle-outline"></ion-icon></div>
+            <h3>Nouvelle Réservation</h3>
+            <p>Parcourez notre matériel et créez un nouvel événement.</p>
+        </a>
+    </div>
+
+    <div class="event-preview">
+        <h3 style="margin-bottom: 20px;">Dernières Réservations</h3>
+        {% if my_events %}
+            <ul style="list-style: none;">
+                {% for event in my_events %}
+                    <li style="padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>{{ event.type_evenement }}</strong>
+                            <div style="color: #666; font-size: 0.8rem;">Prévu pour le {{ event.date_debut }}</div>
+                        </div>
+                        <span style="font-weight: 600; color: var(--primary);">{{ event.get_statut_display }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: #666; text-align: center; padding: 20px;">Vous n'avez pas encore d'événements.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

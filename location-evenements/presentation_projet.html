@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation Projet - Location Événements</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: white;
+            padding: 50px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #00A896;
+            border-bottom: 2px solid #00A896;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            border-left: 5px solid #61BFFB;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #00A896;
+        }
+        .highlight {
+            color: #F44D4D;
+            font-weight: bold;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #fcfcfc;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        ul {
+            list-style-type: square;
+        }
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Présentation du Projet : Location d'Événements</h1>
+        
+        <p class="no-print" style="background: #e1f5fe; padding: 10px; border-radius: 5px; font-size: 0.9em; color: #01579b;">
+            💡 <strong>Note pour le PDF :</strong> Ouvrez ce fichier dans votre navigateur, faites <strong>Ctrl + P</strong> (Imprimer) et choisissez <strong>"Enregistrer au format PDF"</strong>.
+        </p>
+
+        <h2>1. Présentation Générale</h2>
+        <p>Ce projet vise à fournir une solution robuste pour les entreprises de location de matériel événementiel. Il permet de centraliser la gestion des clients, du matériel, et de suivre le cycle complet d'une location, du devis à la restitution.</p>
+
+        <h2>2. Caractéristiques Techniques</h2>
+        <ul>
+            <li><strong>Framework Backend :</strong> Django 6.0</li>
+            <li><strong>Base de Données :</strong> SQLite 3 (extensible vers PostgreSQL)</li>
+            <li><strong>Interface Admin :</strong> Jazzmin (UI moderne & responsive)</li>
+            <li><strong>Charte Graphique :</strong> 
+                <span style="color:#00A896">● #00A896 (Principal)</span>, 
+                <span style="color:#F44D4D">● #F44D4D (Accent)</span>, 
+                <span style="color:#61BFFB">● #61BFFB (Info)</span>
+            </li>
+        </ul>
+
+        <h2>3. Fonctionnalités et Concepts</h2>
+        <h3>Gestion du Stock</h3>
+        <p>Le système assure un suivi en temps réel des quantités. Chaque matériel est catégorisé (Mobilier, Sonorisation, Art de la table) pour une recherche facilitée.</p>
+        
+        <h3>Processus de Location</h3>
+        <p>Chaque location est associée à un client et un type d'événement. Le système calcule automatiquement le montant total en fonction de la durée de location et des quantités demandées.</p>
+
+        <h2>4. Diagramme de Cas d'Utilisation</h2>
+        <div class="mermaid">
+            graph TD
+                Admin[Gestionnaire Admin] --> UC1(Gérer les Clients)
+                Admin --> UC2(Suivre le Stock)
+                Admin --> UC3(Créer des Locations)
+                Admin --> UC4(Valider Facturation)
+                Admin --> UC5(Changer les Statuts)
+        </div>
+
+        <h2>5. Architecture des Données (Diagramme de Classe)</h2>
+        <div class="mermaid">
+            classDiagram
+                Client "1" -- "*" Location : effectue
+                Location "1" -- "*" LigneLocation : contient
+                Materiel "1" -- "*" LigneLocation : est loué
+                Categorie "1" -- "*" Materiel : classifie
+                
+                class Client {
+                    +nom, prenom
+                    +telephone, email
+                }
+                class Materiel {
+                    +nom, prix, quantite
+                }
+                class Location {
+                    +date_debut, date_fin
+                    +statut, total
+                }
+        </div>
+
+        <footer style="margin-top: 50px; text-align: center; font-size: 0.8em; color: #999; border-top: 1px solid #eee; padding-top: 20px;">
+            Document généré pour le projet de Licence - 2026
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

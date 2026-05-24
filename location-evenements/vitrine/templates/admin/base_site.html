@@ -1,0 +1,7 @@
+{% extends "admin/base_site.html" %}
+
+{% block userlinks %}
+    <a href="{% url 'vitrine:admin_dashboard' %}" style="color: #61BFFB; font-weight: bold; text-decoration: underline;">Retour au Dashboard Custom</a> /
+    <a href="{% url 'vitrine:logout' %}" style="color: #F44D4D; font-weight: bold; text-decoration: underline;">Se déconnecter</a> /
+    {{ block.super }}
+{% endblock %}

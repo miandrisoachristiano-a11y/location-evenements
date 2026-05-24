@@ -1,0 +1,232 @@
+{% extends 'vitrine/base.html' %}
+
+{% block title %}Administration - EventManager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #004d40 0%, #1a1a1a 100%);
+        border-radius: 40px;
+        margin: 20px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-wrapper::before {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: var(--primary);
+        filter: blur(150px);
+        top: -100px;
+        right: -100px;
+        opacity: 0.3;
+    }
+
+    .login-wrapper::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: var(--accent);
+        filter: blur(150px);
+        bottom: -100px;
+        left: -100px;
+        opacity: 0.2;
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 60px 40px;
+        border-radius: 30px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .login-header h2 {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: -1px;
+    }
+
+    .login-header p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.1rem;
+    }
+
+    .icon-box {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 2.5rem;
+        color: var(--primary);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .input-field {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px 20px;
+        border-radius: 15px;
+        color: white;
+        font-size: 1.05rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+    }
+
+    .input-field:focus {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(0, 168, 150, 0.2);
+    }
+
+    .input-field::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .submit-button {
+        width: 100%;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 10px 30px rgba(0, 168, 150, 0.3);
+    }
+
+    .submit-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 168, 150, 0.4);
+        filter: brightness(1.1);
+    }
+
+    .error-msg {
+        background: rgba(244, 77, 77, 0.1);
+        border: 1px solid rgba(244, 77, 77, 0.3);
+        color: #F44D4D;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    .back-home {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .back-home a {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .back-home a:hover {
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="icon-box">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                </div>
+                <h2>Sécurisé</h2>
+                <p>Authentification requise pour l'accès</p>
+            </div>
+
+            {% if form.errors %}
+                <div class="error-msg">
+                    <ion-icon name="alert-circle-outline" style="vertical-align: middle;"></ion-icon>
+                    Identifiants ou autorisations invalides.
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Nom d'utilisateur</label>
+                    <input type="text" name="username" id="id_username" class="input-field" 
+                           placeholder="Ex: admin" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Mot de passe</label>
+                    <input type="password" name="password" id="id_password" class="input-field" 
+                           placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="submit-button">
+                    <span>Accéder au Panel</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+            </form>
+
+            <div class="back-home">
+                <a href="/">
+                    <ion-icon name="home-outline"></ion-icon>
+                    Retour au site
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

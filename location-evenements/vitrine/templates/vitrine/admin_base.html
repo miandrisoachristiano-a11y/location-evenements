@@ -1,0 +1,75 @@
+{% extends 'vitrine/base.html' %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .admin-nav-bar {
+        background: var(--dark);
+        padding: 10px 8%;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .admin-nav-bar a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 8px 15px;
+        border-radius: 8px;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .admin-nav-bar a:hover, .admin-nav-bar a.active {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-nav-bar a ion-icon {
+        font-size: 1.1rem;
+    }
+
+    .admin-badge {
+        background: var(--primary);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        margin-left: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-nav-bar">
+    <a href="/">
+        <ion-icon name="home-outline"></ion-icon> Accueil
+    </a>
+    <a href="{% url 'vitrine:admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        <ion-icon name="speedometer-outline"></ion-icon> Dashboard Admin
+    </a>
+    <a href="{% url 'vitrine:manage_events' %}" class="{% if request.resolver_match.url_name == 'manage_events' %}active{% endif %}">
+        <ion-icon name="calendar-outline"></ion-icon> Gérer les événements
+    </a>
+    <a href="{% url 'vitrine:manage_users' %}" class="{% if request.resolver_match.url_name == 'manage_users' %}active{% endif %}">
+        <ion-icon name="people-outline"></ion-icon> Gérer les utilisateurs
+    </a>
+    <a href="{% url 'vitrine:profile' %}">
+        <ion-icon name="person-outline"></ion-icon> Profil
+    </a>
+    <a href="/admin/" target="_blank">
+        <ion-icon name="settings-outline"></ion-icon> Admin Django <span class="admin-badge">AVANCÉ</span>
+    </a>
+    <a href="{% url 'vitrine:logout' %}" style="color: var(--secondary);">
+        <ion-icon name="log-out-outline"></ion-icon> Déconnexion
+    </a>
+</div>
+
+{% block admin_content %}{% endblock %}
+{% endblock %}

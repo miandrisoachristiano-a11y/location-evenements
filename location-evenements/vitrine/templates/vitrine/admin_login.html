@@ -1,0 +1,136 @@
+{% extends 'vitrine/base.html' %}
+
+{% block title %}Connexion Administration - EventManager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-login-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--dark) 0%, #333 100%);
+        border-radius: 40px;
+        margin: 20px 0;
+    }
+
+    .admin-login-card {
+        background: white;
+        padding: 50px;
+        border-radius: 30px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .admin-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .admin-header ion-icon {
+        font-size: 3rem;
+        color: var(--primary);
+        margin-bottom: 15px;
+    }
+
+    .admin-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #F0F0F0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+    }
+
+    .login-btn {
+        background: var(--dark);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 15px;
+        width: 100%;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .login-btn:hover {
+        background: var(--primary);
+        transform: translateY(-2px);
+    }
+
+    .error-msg {
+        color: var(--secondary);
+        background: rgba(244, 77, 77, 0.1);
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-login-wrapper">
+        <div class="admin-login-card">
+            <div class="admin-header">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                <h1>Espace Admin</h1>
+                <p>Projet Licence - EventManager</p>
+            </div>
+
+            {% if form.errors %}
+                <div class="error-msg">
+                    Identifiants incorrects. Veuillez réessayer.
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Nom d'utilisateur</label>
+                    <input type="text" name="username" id="id_username" class="form-control" placeholder="Admin username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Mot de passe</label>
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    Se connecter au Dashboard
+                    <ion-icon name="log-in-outline"></ion-icon>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

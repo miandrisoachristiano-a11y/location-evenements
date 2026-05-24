@@ -1,0 +1,164 @@
+{% extends 'vitrine/admin_base.html' %}
+
+{% block title %}Dashboard Admin - EventManager{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--light);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: var(--primary);
+    }
+
+    .stat-info h3 {
+        font-size: 0.9rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .stat-info p {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    .recent-table {
+        width: 100%;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-top: 40px;
+    }
+
+    .table-header {
+        padding: 20px 30px;
+        background: var(--light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px 30px;
+        text-align: left;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+        font-weight: 600;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .status-en_attente { background: #fff3cd; color: #856404; }
+    .status-confirmee { background: #d4edda; color: #155724; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container">
+    <div class="welcome-section" style="margin-bottom: 40px;">
+        <h1 style="font-size: 2.5rem; color: var(--dark);">Bienvenue, Administrateur</h1>
+        <p style="color: #666;">Gérez les activités de la plateforme en un coup d'œil.</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><ion-icon name="people-outline"></ion-icon></div>
+            <div class="stat-info">
+                <h3>Utilisateurs</h3>
+                <p>{{ total_users }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><ion-icon name="calendar-outline"></ion-icon></div>
+            <div class="stat-info">
+                <h3>Événements</h3>
+                <p>{{ total_events }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><ion-icon name="cash-outline"></ion-icon></div>
+            <div class="stat-info">
+                <h3>Ventes (Sim.)</h3>
+                <p>N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-table">
+        <div class="table-header">
+            <h3>Événements Récents</h3>
+            <a href="{% url 'vitrine:manage_events' %}" style="color: var(--primary); text-decoration: none; font-weight: 600;">Tout voir</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in recent_events %}
+                <tr>
+                    <td>{{ event.date_debut }}</td>
+                    <td>{{ event.client }}</td>
+                    <td>{{ event.type_evenement }}</td>
+                    <td><span class="status-badge status-{{ event.statut }}">{{ event.get_statut_display }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">Aucun événement récent.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

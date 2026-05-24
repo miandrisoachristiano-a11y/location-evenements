@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sommaire - Mémoire de Licence</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 40px auto; 
+            max-width: 800px; 
+            color: #333; 
+            padding: 20px;
+        }
+        h1 { 
+            text-align: center; 
+            color: #2c3e50; 
+            border-bottom: 2px solid #2c3e50; 
+            padding-bottom: 10px; 
+            text-transform: uppercase;
+        }
+        h2 { 
+            color: #2980b9; 
+            margin-top: 40px; 
+            border-bottom: 1px solid #bdc3c7; 
+            padding-bottom: 5px; 
+        }
+        h3 { 
+            color: #34495e; 
+            margin-top: 25px; 
+            font-size: 1.1em;
+        }
+        ul { 
+            list-style-type: none; 
+            padding-left: 0; 
+        }
+        li { 
+            margin-bottom: 8px; 
+        }
+        .chiffre {
+            display: inline-block;
+            width: 30px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        .preambule {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 2;
+        }
+        .intro-part {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .btn-print {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-print:hover {
+            background-color: #2ecc71;
+        }
+        @media print {
+            body { margin: 0; max-width: 100%; padding: 0; }
+            .no-print { display: none; }
+            h2 { page-break-before: always; }
+            h2:first-of-type { page-break-before: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="no-print btn-print" onclick="window.print()">🖨️ Enregistrer en PDF</button>
+
+    <h1>Sommaire de Mémoire</h1>
+
+    <div class="preambule">
+        DÉDICACES<br>
+        REMERCIEMENTS<br>
+        AVANT-PROPOS<br>
+        RÉSUMÉ / ABSTRACT<br>
+        LISTE DES ABRÉVIATIONS<br>
+        LISTE DES FIGURES ET TABLEAUX<br>
+        INTRODUCTION GÉNÉRALE
+    </div>
+
+    <h2>PARTIE I : CONTEXTE GÉNÉRAL, ÉTAT DE L'ART ET SPÉCIFICATION DES BESOINS</h2>
+    <p class="intro-part">Cette partie pose les bases du projet, analyse l'existant et définit clairement ce que l'application doit faire.</p>
+
+    <h3>CHAPITRE 1 : CADRE DU PROJET ET OUTILS D’ÉTUDE</h3>
+    <ul>
+        <li><span class="chiffre">1.1.</span> Présentation de la structure d’accueil (ou du domaine de la location d'événements)</li>
+        <li><span class="chiffre">1.2.</span> Problématique et justification du sujet</li>
+        <li><span class="chiffre">1.3.</span> Objectifs généraux et spécifiques du projet</li>
+        <li><span class="chiffre">1.4.</span> Méthodologie de travail adoptée</li>
+    </ul>
+
+    <h3>CHAPITRE 2 : ÉTUDE DE L’EXISTANT ET ÉTAT DE L'ART</h3>
+    <ul>
+        <li><span class="chiffre">2.1.</span> Description du processus actuel de gestion des locations</li>
+        <li><span class="chiffre">2.2.</span> Critique de l’existant (Limites, contraintes)</li>
+        <li><span class="chiffre">2.3.</span> Étude comparative des solutions logicielles existantes</li>
+        <li><span class="chiffre">2.4.</span> Proposition de la nouvelle solution web (Plateforme Django)</li>
+    </ul>
+
+    <h3>CHAPITRE 3 : ANALYSE ET SPÉCIFICATION DES BESOINS</h3>
+    <ul>
+        <li><span class="chiffre">3.1.</span> Identification des acteurs du système</li>
+        <li><span class="chiffre">3.2.</span> Spécification des besoins fonctionnels</li>
+        <li><span class="chiffre">3.3.</span> Spécification des besoins non fonctionnels</li>
+        <li><span class="chiffre">3.4.</span> Définition des règles de gestion</li>
+    </ul>
+
+    <h2>PARTIE II : MODÉLISATION ET CONCEPTION DU SYSTÈME AVEC UML</h2>
+    <p class="intro-part">Cette partie est le cœur théorique de votre travail informatique. Elle utilise le langage UML pour traduire les besoins en schémas compréhensibles orientés objet.</p>
+
+    <h3>CHAPITRE 4 : ANALYSE ET MODÉLISATION DES EXIGENCES (UML)</h3>
+    <ul>
+        <li><span class="chiffre">4.1.</span> Présentation du langage UML et justification de son choix</li>
+        <li><span class="chiffre">4.2.</span> Identification et description des acteurs UML</li>
+        <li><span class="chiffre">4.3.</span> Diagramme global des cas d'utilisation</li>
+        <li><span class="chiffre">4.4.</span> Description textuelle des cas d'utilisation critiques (ex: Réserver un matériel)</li>
+    </ul>
+
+    <h3>CHAPITRE 5 : MODÉLISATION DYNAMIQUE DU SYSTÈME (UML)</h3>
+    <ul>
+        <li><span class="chiffre">5.1.</span> Diagrammes de séquences (Interactions objets/acteurs lors d'une location)</li>
+        <li><span class="chiffre">5.2.</span> Diagrammes d'activités (Le cycle de validation d'une réservation)</li>
+        <li><span class="chiffre">5.3.</span> Diagrammes d'états-transitions (Le cycle de vie d'un équipement ou de son état)</li>
+    </ul>
+
+    <h3>CHAPITRE 6 : MODÉLISATION STATIQUE ET ARCHITECTURE DES DONNÉES (UML)</h3>
+    <ul>
+        <li><span class="chiffre">6.1.</span> Diagramme de classes UML (Entités métier, attributs, méthodes et associations)</li>
+        <li><span class="chiffre">6.2.</span> Règles de passage du diagramme de classes au modèle relationnel</li>
+        <li><span class="chiffre">6.3.</span> Modèle Logique de Données (MLD) / Schéma Relationnel de la base</li>
+        <li><span class="chiffre">6.4.</span> Dictionnaire de données complet des tables</li>
+    </ul>
+
+    <h2>PARTIE III : RÉALISATION, DÉPLOIEMENT ET ÉVALUATION DU SYSTÈME</h2>
+    <p class="intro-part">Cette partie démontre vos compétences pratiques, présente l'application finale et dresse le bilan de votre travail.</p>
+
+    <h3>CHAPITRE 7 : ENVIRONNEMENT DE DÉVELOPPEMENT ET ARCHITECTURE</h3>
+    <ul>
+        <li><span class="chiffre">7.1.</span> Architecture du système (Pattern MVT de Django)</li>
+        <li><span class="chiffre">7.2.</span> Présentation de l'environnement matériel et des outils (IDE, Git...)</li>
+        <li><span class="chiffre">7.3.</span> Choix des technologies (Python, HTML/CSS/JS, SQLite)</li>
+    </ul>
+
+    <h3>CHAPITRE 8 : DÉVELOPPEMENT ET PRÉSENTATION DES INTERFACES</h3>
+    <ul>
+        <li><span class="chiffre">8.1.</span> Implémentation du système réseau de l'application</li>
+        <li><span class="chiffre">8.2.</span> Interfaces publiques : Espace Vitrine et Catalogue interactif</li>
+        <li><span class="chiffre">8.3.</span> Espace Client Privé : Inscription, tableaux de bord client et suivi</li>
+        <li><span class="chiffre">8.4.</span> Interface Administrateur : Gestion des ressources et de la facturation</li>
+    </ul>
+
+    <h3>CHAPITRE 9 : TESTS, VALIDATION ET PERSPECTIVES</h3>
+    <ul>
+        <li><span class="chiffre">9.1.</span> Stratégie de tests (Unitaires, d'intégration et scénarios utilisateurs)</li>
+        <li><span class="chiffre">9.2.</span> Analyse des difficultés rencontrées au cours du développement</li>
+        <li><span class="chiffre">9.3.</span> Bilan global du projet vis-à-vis des objectifs initiaux</li>
+        <li><span class="chiffre">9.4.</span> Perspectives d'amélioration et futures mises à jour</li>
+    </ul>
+
+    <div class="preambule" style="margin-top: 40px;">
+        CONCLUSION GÉNÉRALE<br>
+        BIBLIOGRAPHIE / WEBOGRAPHIE<br>
+        ANNEXES<br>
+        TABLE DES MATIÈRES
+    </div>
+
+</body>
+</html>

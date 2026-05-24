@@ -1,0 +1,58 @@
+/* Couleurs principales: #00A896, #F44D4D, #61BFFB */
+
+/* Surcharge de la couleur principale (ex: bouton de connexion, header) */
+:root {
+    --primary: #00A896 !important;
+    --primary-light: #00A896 !important;
+    --primary-dark: #00A896 !important;
+    --secondary: #F44D4D !important;
+    --info: #61BFFB !important;
+    --cyan: #00A896 !important;
+    --danger: #F44D4D !important;
+}
+
+/* Navbar supérieure */
+.main-header.navbar {
+    background-color: #00A896 !important;
+    border-bottom: 0 !important;
+}
+
+.main-header.navbar .nav-link {
+    color: white !important;
+}
+
+/* Sidebar (Menu de gauche) - Personnalisation des liens actifs */
+.main-sidebar .nav-pills .nav-link.active, 
+.main-sidebar .nav-pills .show > .nav-link {
+    background-color: #61BFFB !important;
+    color: white !important;
+}
+
+/* Boutons de type 'Primary' (ex: Sauvegarder) */
+.btn-primary {
+    background-color: #00A896 !important;
+    border-color: #00A896 !important;
+}
+.btn-primary:hover {
+    background-color: #008f80 !important;
+    border-color: #008f80 !important;
+}
+
+/* Badges et Boutons accentués (ex: Supprimer) */
+.badge-danger, .badge-warning, .btn-danger, .btn-warning {
+    background-color: #F44D4D !important;
+    border-color: #F44D4D !important;
+    color: white !important;
+}
+.btn-danger:hover {
+    background-color: #d84141 !important;
+    border-color: #d84141 !important;
+}
+
+/* Liens génériques */
+a {
+    color: #61BFFB;
+}
+a:hover {
+    color: #4b9bce;
+}
