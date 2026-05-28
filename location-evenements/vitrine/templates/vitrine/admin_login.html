@@ -4,114 +4,375 @@
 
 {% block extra_css %}
 <style>
-    .admin-login-wrapper {
-        min-height: 80vh;
+    /* Fullscreen Admin Page Overlay */
+    .admin-login-fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #0b0f19;
+        z-index: 9999; /* Overrides everything including navbar/footer */
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, var(--dark) 0%, #333 100%);
-        border-radius: 40px;
-        margin: 20px 0;
+        overflow: hidden;
+        font-family: 'Outfit', sans-serif;
     }
 
-    .admin-login-card {
-        background: white;
-        padding: 50px;
-        border-radius: 30px;
+    /* Floating Abstract Blobs */
+    .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        z-index: 1;
+        animation: float 20s infinite alternate ease-in-out;
+    }
+
+    .blob-1 {
+        width: 400px;
+        height: 400px;
+        background: var(--primary);
+        top: -100px;
+        left: -100px;
+    }
+
+    .blob-2 {
+        width: 500px;
+        height: 500px;
+        background: var(--accent);
+        bottom: -150px;
+        right: -100px;
+        animation-delay: -5s;
+    }
+
+    .blob-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--secondary);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.05;
+        animation-duration: 25s;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+        50% {
+            transform: translate(40px, -60px) scale(1.1);
+        }
+        100% {
+            transform: translate(-20px, 30px) scale(0.9);
+        }
+    }
+
+    /* Card Container */
+    .admin-login-card-container {
+        position: relative;
+        z-index: 10;
         width: 100%;
-        max-width: 500px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        max-width: 460px;
+        padding: 20px;
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Card Box */
+    .admin-login-card {
+        background: rgba(17, 24, 39, 0.7);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Back Button */
+    .back-to-site {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: 0.3s;
+        padding: 10px 18px;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+    }
+
+    .back-to-site:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateX(-3px);
+    }
+
+    /* Header styling */
     .admin-header {
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: 35px;
     }
 
-    .admin-header ion-icon {
-        font-size: 3rem;
+    .admin-icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(0, 168, 150, 0.1) 0%, rgba(97, 191, 251, 0.1) 100%);
+        border: 1px solid rgba(0, 168, 150, 0.25);
+        margin-bottom: 20px;
+        animation: pulseIcon 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseIcon {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 168, 150, 0.4);
+            border-color: rgba(0, 168, 150, 0.25);
+        }
+        100% {
+            box-shadow: 0 0 20px 4px rgba(0, 168, 150, 0.1);
+            border-color: rgba(97, 191, 251, 0.6);
+        }
+    }
+
+    .admin-icon-wrapper ion-icon {
+        font-size: 2.2rem;
         color: var(--primary);
-        margin-bottom: 15px;
+        --ionicon-stroke-width: 32px;
     }
 
     .admin-header h1 {
-        font-size: 2rem;
+        font-size: 1.85rem;
         font-weight: 700;
-        color: var(--dark);
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 6px;
     }
 
+    .admin-header p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.45);
+        font-weight: 400;
+    }
+
+    /* Form Fields */
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 22px;
+        position: relative;
     }
 
     .form-group label {
         display: block;
         margin-bottom: 8px;
+        font-size: 0.85rem;
         font-weight: 600;
-        color: var(--dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-wrapper ion-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 1.25rem;
+        transition: 0.3s;
     }
 
     .form-control {
         width: 100%;
-        padding: 15px 20px;
-        border: 2px solid #F0F0F0;
-        border-radius: 12px;
-        font-size: 1rem;
-        transition: 0.3s;
+        padding: 14px 16px 14px 46px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        font-size: 0.95rem;
+        color: white;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-control:hover {
+        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.06);
     }
 
     .form-control:focus {
+        background: rgba(255, 255, 255, 0.08);
         border-color: var(--primary);
+        box-shadow: 0 0 16px rgba(0, 168, 150, 0.25);
         outline: none;
     }
 
-    .login-btn {
-        background: var(--dark);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 15px;
-        width: 100%;
-        font-size: 1.1rem;
-        font-weight: 700;
+    .form-control:focus ~ ion-icon {
+        color: var(--primary);
+    }
+
+    /* Password toggle button */
+    .password-toggle {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
         cursor: pointer;
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 1.25rem;
         transition: 0.3s;
+        border: none;
+        background: none;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0;
+    }
+
+    .password-toggle:hover {
+        color: white;
+    }
+
+    /* Error Message */
+    .error-msg {
+        display: flex;
+        align-items: center;
         gap: 10px;
+        color: #ff8b8b;
+        background: rgba(244, 77, 77, 0.08);
+        border: 1px solid rgba(244, 77, 77, 0.2);
+        padding: 12px 16px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+        font-size: 0.88rem;
+        line-height: 1.4;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .error-msg ion-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
+
+    /* Button styling */
+    .login-btn {
+        background: linear-gradient(135deg, var(--primary) 0%, #02c3b3 100%);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 14px;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(0, 168, 150, 0.3);
+        margin-top: 10px;
     }
 
     .login-btn:hover {
-        background: var(--primary);
         transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 168, 150, 0.5);
     }
 
-    .error-msg {
-        color: var(--secondary);
-        background: rgba(244, 77, 77, 0.1);
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 20px;
+    .login-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 10px rgba(0, 168, 150, 0.2);
+    }
+
+    .login-btn ion-icon {
+        font-size: 1.2rem;
+        transition: 0.3s;
+    }
+
+    .login-btn:hover ion-icon {
+        transform: translateX(4px);
+    }
+
+    /* Footer copy inside card */
+    .card-footer {
         text-align: center;
-        font-size: 0.9rem;
+        margin-top: 25px;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Hide template base nav and footer when this view is loaded */
+    body {
+        overflow: hidden;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="admin-login-wrapper">
+<div class="admin-login-fullscreen">
+    <!-- Back to site link -->
+    <a href="{% url 'vitrine:index' %}" class="back-to-site">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Retour au site
+    </a>
+
+    <!-- Background decorative elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="admin-login-card-container">
         <div class="admin-login-card">
             <div class="admin-header">
-                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                <div class="admin-icon-wrapper">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                </div>
                 <h1>Espace Admin</h1>
                 <p>Projet Licence - EventManager</p>
             </div>
 
             {% if form.errors %}
                 <div class="error-msg">
-                    Identifiants incorrects. Veuillez réessayer.
+                    <ion-icon name="alert-circle-outline"></ion-icon>
+                    <span>Identifiants incorrects. Veuillez réessayer.</span>
                 </div>
             {% endif %}
 
@@ -119,18 +380,46 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="id_username">Nom d'utilisateur</label>
-                    <input type="text" name="username" id="id_username" class="form-control" placeholder="Admin username" required autofocus>
+                    <div class="input-wrapper">
+                        <input type="text" name="username" id="id_username" class="form-control" placeholder="Entrez votre identifiant" required autofocus>
+                        <ion-icon name="person-outline"></ion-icon>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="id_password">Mot de passe</label>
-                    <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+                    <div class="input-wrapper">
+                        <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" aria-label="Afficher le mot de passe">
+                            <ion-icon name="eye-outline" id="password-toggle-icon"></ion-icon>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" class="login-btn">
-                    Se connecter au Dashboard
-                    <ion-icon name="log-in-outline"></ion-icon>
+                    <span>Se connecter au Dashboard</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
                 </button>
             </form>
+
+            <div class="card-footer">
+                &copy; 2026 EventManager - Sécurisé par Django
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('id_password');
+        const toggleIcon = document.getElementById('password-toggle-icon');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.name = 'eye-off-outline';
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.name = 'eye-outline';
+        }
+    }
+</script>
 {% endblock %}
